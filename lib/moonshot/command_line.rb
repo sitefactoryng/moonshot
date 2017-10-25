@@ -112,7 +112,7 @@ module Moonshot
         @commands[command_name] = klass
       end
 
-      @commands = @commands.sort_by{ |k,v| k.to_s }.to_h
+      @commands = @commands.sort_by { |k, _v| k.to_s }.to_h
     end
 
     def commandify(klass)
