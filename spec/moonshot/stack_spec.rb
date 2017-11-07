@@ -99,20 +99,28 @@ describe Moonshot::Stack do
       context 'when template_s3_bucket is set' do
         before(:each) do
           config.template_s3_bucket = 'rspec-bucket'
+          allow(Time).to receive(:now).and_return(Time.new('2017-11-07 12:00:00 +0000'))
         end
 
         let(:expected_put_object_options) do
           {
             bucket: config.template_s3_bucket,
-            key: an_instance_of(String),
+            key: 'rspec-app-staging-1483228800-template.yml',
             body: an_instance_of(String)
           }
         end
 
-        it 'should call put_object' do
+        let(:expected_create_stack_options) do
+          {
+            template_url: 'http://rspec-bucket.s3.amazonaws.com/rspec-app-staging-1483228800-template.yml'
+          }
+        end
+
+        it 'should call put_object and create_stack with template_url parameter' do
           expect(s3_client).to receive(:put_object)
             .with(hash_including(expected_put_object_options))
           expect(cf_client).to receive(:create_stack)
+            .with(hash_including(expected_create_stack_options))
           subject.create
         end
       end

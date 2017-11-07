@@ -185,7 +185,6 @@ module Moonshot
       template_url = "http://#{@config.template_s3_bucket}.s3.amazonaws.com/#{s3_object_key}"
 
       @ilog.start "Uploading template to #{template_url}" do |s|
-        s3_client = Aws::S3::Client.new
         s3_client.put_object(
           bucket: @config.template_s3_bucket,
           key: s3_object_key,
